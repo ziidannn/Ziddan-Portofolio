@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Ziddan Azzahra</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- Custom CSS for dark theme and animations -->
+    <style>
+        /* Menggunakan font Space Grotesk dan Kursor Kustom */
+        html, body {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #e2e8f0; /* slate-200 */
+            background: linear-gradient(270deg, #0f172a, #0c0a1e, #1e3a8a, #000000);
+            background-size: 800% 800%;
+            animation: gradientAnimation 25s ease infinite;
+            cursor: none; /* Sembunyikan kursor default */
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Kursor Kustom yang Lebih Ringan */
+        .cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            width: 10px;
+            height: 10px;
+            background-color: #38bdf8;
+            border-radius: 50%;
+            transition: width 0.2s ease-in-out, height 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        }
+        
+        body.cursor-hover .cursor-dot {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(56, 189, 248, 0.4);
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        main, header, footer {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #38bdf8, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-link.active {
+            color: #38bdf8;
+            font-weight: 700;
+        }
+        .scroll-reveal {
+            visibility: hidden;
+        }
+        
+        /* Animasi Curtain Reveal */
+        .curtain {
+            position: fixed;
+            top: 0;
+            width: 50%;
+            height: 100vh;
+            background-color: #0f172a;
+            z-index: 100;
+            transition: transform 1.2s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+        .curtain-left { left: 0; }
+        .curtain-right { right: 0; }
+        
+        body.loaded .curtain-left { transform: translateX(-100%); }
+        body.loaded .curtain-right { transform: translateX(100%); }
+
+        .hero-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease 1s, transform 0.8s ease 1s;
+        }
+        body.loaded .hero-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Efek sorotan di belakang nama */
+        .name-spotlight::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0) 60%);
+            z-index: -1;
+            animation: pulse-glow 5s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .cert-card {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Kursor Kustom -->
+    <div class="cursor-dot"></div>
+    
+    <!-- Animasi Tirai -->
+    <div class="curtain curtain-left"></div>
+    <div class="curtain curtain-right"></div>
+
+    <!-- Particle.js Background -->
+    <div id="particles-js"></div>
+
+    <!-- Header & Navigation -->
+    <header class="bg-slate-900/70 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 border-b border-slate-700/50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white">Ziddan Azzahra<span class="text-sky-400">_</span></a>
+            <nav id="navbar" class="hidden md:flex space-x-6 text-sm font-semibold">
+                <a href="#hero" class="nav-link text-slate-300 hover:text-sky-400 transition-colors duration-300">Home</a>
+                <a href="#about" class="nav-link text-slate-300 hover:text-sky-400 transition-colors duration-300">About</a>
+                <a href="#education" class="nav-link text-slate-300 hover:text-sky-400 transition-colors duration-300">Education</a>
+                <a href="#experience" class="nav-link text-slate-300 hover:text-sky-400 transition-colors duration-300">Experience</a>
+                <a href="#skills" class="nav-link text-slate-300 hover:text-sky-400 transition-colors duration-300">Skills</a>
+                <a href="#awards" class="nav-link text-slate-300 hover:text-sky-400 transition-colors duration-300">Achievement</a>
+                <a href="#contact" class="nav-link text-slate-300 hover:text-sky-400 transition-colors duration-300">Contact</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-white">
+                <i data-feather="menu"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800">
+            <a href="#hero" class="nav-link-mobile block py-2 px-6 text-sm text-slate-300 hover:bg-slate-700">Home</a>
+            <a href="#about" class="nav-link-mobile block py-2 px-6 text-sm text-slate-300 hover:bg-slate-700">About</a>
+            <a href="#education" class="nav-link-mobile block py-2 px-6 text-sm text-slate-300 hover:bg-slate-700">Education</a>
+            <a href="#experience" class="nav-link-mobile block py-2 px-6 text-sm text-slate-300 hover:bg-slate-700">Experience</a>
+            <a href="#projects" class="nav-link-mobile block py-2 px-6 text-sm text-slate-300 hover:bg-slate-700">Projects</a>
+            <a href="#skills" class="nav-link-mobile block py-2 px-6 text-sm text-slate-300 hover:bg-slate-700">Skills</a>
+            <a href="#awards" class="nav-link-mobile block py-2 px-6 text-sm text-slate-300 hover:bg-slate-700">Achievement</a>
+            <a href="#contact" class="nav-link-mobile block py-2 px-6 text-sm text-slate-300 hover:bg-slate-700">Contact</a>
+        </div>
+    </header>
+
+    <main class="pt-24">
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex flex-col justify-center items-center container mx-auto px-6 relative">
+            <div class="hero-content w-full max-w-4xl">
+                <!-- Lanyard Card -->
+                <div class="glass-card rounded-xl p-8 shadow-2xl">
+                    <div class="grid md:grid-cols-3 gap-8 items-center">
+                        <!-- Left Side: Name and Title -->
+                        <div class="md:col-span-2 text-center md:text-left relative">
+                            <div class="relative inline-block name-spotlight">
+                                <h1 class="text-5xl md:text-7xl font-bold text-white leading-tight">
+                                    Ziddan Azzahra
+                                </h1>
+                            </div>
+                            <h2 class="text-2xl md:text-3xl font-bold mt-2">
+                                <span class="text-gradient"></span>
+                            </h2>
+                        </div>
+                        <!-- Right Side: Photo -->
+                        <div class="flex justify-center">
+                            <div class="w-40 h-40 rounded-full bg-gradient-to-br from-sky-500/20 to-indigo-500/20 p-1.5 shadow-lg">
+                                <img src="img/gaya3.jpg" alt="Foto Profil Ziddan Azzahra" class="rounded-full w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Action Buttons & Socials -->
+                <div class="mt-12 text-center">
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+                        <a href="#contact" class="bg-sky-500 text-white font-bold px-8 py-3 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105 inline-block">
+                            Hubungi Saya
+                        </a>
+                        <a href="http://googleusercontent.com/file_content/4" download="Ziddan_Azzahra_CV.pdf" class="bg-transparent border-2 border-slate-500 text-slate-300 font-bold px-8 py-3 rounded-lg hover:bg-slate-700 hover:border-slate-700 transition-all duration-300 transform hover:scale-105 inline-block">
+                            Unduh CV
+                        </a>
+                    </div>
+                    <div class="flex justify-center space-x-6">
+                        <a href="https://github.com/ziidannn" target="_blank" class="text-slate-400 hover:text-sky-400 transition-colors duration-300"><i data-feather="github" class="w-7 h-7"></i></a>
+                        <a href="https://linkedin.com/in/zdanazhr" target="_blank" class="text-slate-400 hover:text-sky-400 transition-colors duration-300"><i data-feather="linkedin" class="w-7 h-7"></i></a>
+                        <a href="mailto:zidanazzahra916@gmail.com" class="text-slate-400 hover:text-sky-400 transition-colors duration-300"><i data-feather="mail" class="w-7 h-7"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-24 bg-slate-900/30">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-white text-center mb-16 scroll-reveal">About Me</h2>
+                <div class="grid md:grid-cols-2 items-center gap-16 max-w-5xl mx-auto">
+                    <div class="scroll-reveal">
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            I am an Informatics Engineering student passionate about full-stack web development. My experience is not limited to technical projects but also extends to leadership, where I am trusted as the Deputy Head of the Research & Technology Department. I am accustomed to working in teams and continuously honing my skills through various projects and industry training to create impactful technology-based solutions.
+                        </p>
+                    </div>
+                    <div class="flex justify-center scroll-reveal">
+                        <div class="w-80 h-96 rounded-lg bg-gradient-to-br from-sky-500/20 to-indigo-500/20 p-2 shadow-2xl">
+                            <img src="img/gaya3.jpg" alt="Foto Profil Ziddan Azzahra" class="rounded-lg w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-white text-center mb-12 scroll-reveal">Education</h2>
+                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <div class="glass-card p-8 rounded-lg scroll-reveal">
+                        <h3 class="text-2xl font-bold text-white">B.Sc. in Informatics Engineering</h3>
+                        <p class="text-sky-400 mb-2">Jakarta Global University</p>
+                        <p class="text-sm text-slate-400 mb-4">2023 – Present</p>
+                        <p class="text-slate-300">Deepening knowledge in software development, data structures, and algorithms using C++, Java, and Python.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-lg scroll-reveal">
+                        <h3 class="text-2xl font-bold text-white">Software Engineering</h3>
+                        <p class="text-sky-400 mb-2">SMK Negeri 1 Depok</p>
+                        <p class="text-sm text-slate-400 mb-4">2020 – 2023</p>
+                        <p class="text-slate-300">Focused on web and mobile development fundamentals (PHP, HTML, CSS, Java, XML).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-24 bg-slate-900/30">
+            <h2 class="text-4xl font-bold text-white text-center mb-16 scroll-reveal">Project Experience</h2>
+            <div class="container mx-auto px-6">
+                <!-- RISTEK Experience -->
+                <div class="grid md:grid-cols-2 items-center gap-16 max-w-5xl mx-auto mb-24">
+                    <div class="flex justify-center scroll-reveal md:order-2">
+                        <img src="img/wakadep.jpg" alt="Foto Departemen RISTEK" class="rounded-lg w-full max-w-md shadow-2xl">
+                    </div>
+                    <div class="scroll-reveal md:order-1">
+                        <p class="text-sm text-sky-400 mb-1">Aug 2024 – Present</p>
+                        <h3 class="text-3xl font-bold text-white mb-4">Deputy Head of RISTEK Department</h3>
+                        <p class="text-lg text-slate-400 mb-4">HIMATIF JGU</p>
+                        <p class="text-slate-300 leading-relaxed">Assisting the Head of Department in leading strategies and operations, focusing on the technical skill development of members. Initiating and managing flagship programs like Ngoding Bareng, DevMatch, and the Research & Innovation Community.</p>
+                    </div>
+                </div>
+                <!-- PKM Experience -->
+                <div class="grid md:grid-cols-2 items-center gap-16 max-w-5xl mx-auto">
+                    <div class="flex justify-center scroll-reveal">
+                         <img src="img/pkm.png" alt="Foto Workshop PKM" class="rounded-lg w-full max-w-md shadow-2xl">
+                    </div>
+                    <div class="scroll-reveal">
+                        <p class="text-sm text-sky-400 mb-1">Sep – Dec 2024</p>
+                        <h3 class="text-3xl font-bold text-white mb-4">Community Service Workshop (PKM)</h3>
+                        <p class="text-lg text-slate-400 mb-4">SLB Bina Insani, Depok</p>
+                        <p class="text-slate-300 leading-relaxed">Actively involved in developing digital learning materials for deaf students. Tasked with adapting physics materials into Indonesian Sign Language (SIBI) to improve accessibility and understanding.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-white text-center mb-12 scroll-reveal">Featured Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="glass-card rounded-lg overflow-hidden group scroll-reveal">
+                        <img src="img/landing_coa.png" alt="COA Website Project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">Laboratory Website (COA)</h3>
+                            <p class="text-slate-400 text-sm mb-4">Web app to automate workflow and issue laboratory analysis certificates.</p>
+                            <button class="project-details-button text-sm font-semibold text-sky-400 hover:text-sky-300" data-title="Laboratory Website (Certificate of Analysis - COA)" 
+                            data-description="Designing and developing a web application for laboratory parameter analysis to automate workflows and certificate issuance. Responsible for building the system's logic flow from data input to the output of a valid Certificate of Analysis (COA)." 
+                            data-img1="img/create coa.png" data-img2="img/analisis coa.png">View Details &rarr;</button>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-lg overflow-hidden group scroll-reveal">
+                        <img src="img/landing_himatif.png" alt="HIMATIF Website Project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">HIMATIF Website</h3>
+                            <p class="text-slate-400 text-sm mb-4">Official website for the Informatics Engineering Student Association (HIMATIF) JGU.</p>
+                            <button class="project-details-button text-sm font-semibold text-sky-400 hover:text-sky-300" data-title="Informatics Engineering Student Association (HIMATIF) Website" 
+                            data-description="Built and launched the official website for the Informatics Engineering Student Association using PHP with the Laravel framework. Designed the database and backend structure to manage content, event information, and membership data." 
+                            data-img1="img/kabinet.png" data-img2="img/kabinet.png">View Details &rarr;</button>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-lg overflow-hidden group scroll-reveal">
+                        <img src="img/landing_ami.png" alt="AMI Website Project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">Internal Quality Audit (AMI) Website</h3>
+                            <p class="text-slate-400 text-sm mb-4">A web platform to facilitate the annual performance assessment process at JGU.</p>
+                            <button class="project-details-button text-sm font-semibold text-sky-400 hover:text-sky-300" data-title="Internal Quality Audit (AMI) Website" 
+                            data-description="Developed a web platform for the campus's Internal Quality Audit (AMI) using PHP with the Laravel framework. Created a system that facilitates the annual performance assessment process for various departments and study programs." 
+                            data-img1="img/login_ami.png" data-img2="img/tampilan audit plan.png">View Details &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-24 bg-slate-900/30">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-white text-center mb-16 scroll-reveal">Languages & Skills</h2>
+                <div class="max-w-6xl mx-auto">
+                    <div class="mb-16 scroll-reveal">
+                        <h3 class="text-2xl font-semibold text-white mb-8 text-center">Backend Development</h3>
+                        <div class="flex justify-center flex-wrap gap-10">
+                            <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-plain.svg" class="w-14 h-14 mb-2"/><span class="text-sm">PHP</span></div>
+                            <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">Laravel</span></div>
+                            <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">JavaScript</span></div>
+                            <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">Node.js</span></div>
+                            <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg" class="w-14 h-14 mb-2" style="filter: invert(1)"/><span class="text-sm">Express</span></div>
+                        </div>
+                    </div>
+                    <div class="mb-16 scroll-reveal">
+                        <h3 class="text-2xl font-semibold text-white mb-8 text-center">Frontend Development</h3>
+                        <div class="flex justify-center flex-wrap gap-10">
+                            <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">HTML5</span></div>
+                            <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">CSS3</span></div>
+                            <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bootstrap/bootstrap-plain.svg" class="w-14 h-14 mb-2"/><span class="text-sm">Bootstrap</span></div>
+                            <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">Vue.js</span></div>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-12">
+                        <div class="scroll-reveal">
+                            <h3 class="text-2xl font-semibold text-white mb-8 text-center">Databases</h3>
+                            <div class="flex justify-center flex-wrap gap-10">
+                                <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original-wordmark.svg" class="w-14 h-14 mb-2"/><span class="text-sm">MySQL</span></div>
+                                <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original-wordmark.svg" class="w-14 h-14 mb-2"/><span class="text-sm">MongoDB</span></div>
+                            </div>
+                        </div>
+                        <div class="scroll-reveal">
+                            <h3 class="text-2xl font-semibold text-white mb-8 text-center">Other Languages</h3>
+                            <div class="flex justify-center flex-wrap gap-10">
+                                <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">Python</span></div>
+                                <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">Java</span></div>
+                                <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">C++</span></div>
+                            </div>
+                        </div>
+                        <div class="scroll-reveal">
+                            <h3 class="text-2xl font-semibold text-white mb-8 text-center">Tools</h3>
+                            <div class="flex justify-center flex-wrap gap-10">
+                                <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">Git</span></div>
+                                <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">VS Code</span></div>
+                                <div class="flex flex-col items-center text-center w-24"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" class="w-14 h-14 mb-2"/><span class="text-sm">Postman</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Awards Section -->
+        <section id="awards" class="py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-white text-center mb-12 scroll-reveal">Awards & Certifications</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- EXPO Certificate -->
+                    <div class="glass-card cert-card rounded-lg overflow-hidden group scroll-reveal" data-img-src="img/expo.jpg">
+                        <img src="img/expo.jpg" alt="Sertifikat IDEA REGENERATION EXPO" class="w-full h-52 object-cover object-top group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold text-white">Gold Medal, IDEA REGENERATION EXPO</h3>
+                            <p class="text-sm text-slate-400">Dec 2024 - International</p>
+                        </div>
+                    </div>
+                    <!-- Python Certificate -->
+                    <div class="glass-card cert-card rounded-lg overflow-hidden group scroll-reveal" data-img-src="img/sertifikat-py.jpg">
+                         <img src="img/sertifikat-py.jpg" alt="Sertifikat Memulai Pemrograman dengan Python" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold text-white">Memulai Pemrograman dengan Python</h3>
+                            <p class="text-sm text-slate-400">Nov 2024 - Dicoding</p>
+                        </div>
+                    </div>
+                    <!-- Data Visualization Certificate -->
+                    <div class="glass-card cert-card rounded-lg overflow-hidden group scroll-reveal" data-img-src="img/sertifikat-vd.jpg">
+                        <img src="img/sertifikat-vd.jpg" alt="Sertifikat Belajar Dasar Visualisasi Data" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold text-white">Belajar Dasar Visualisasi Data</h3>
+                            <p class="text-sm text-slate-400">Nov 2024 - Dicoding</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <footer id="contact" class="py-24 bg-slate-900/30">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold text-white mb-4 scroll-reveal">Let's Talk and Collaborate!</h2>
+                <p class="text-slate-400 mb-8 max-w-2xl mx-auto scroll-reveal">I enjoy being involved in digital projects, coding together, or developing ideas. Don't hesitate to contact me to discuss available opportunities further.</p>
+                <a href="mailto:zidanazzahra916@gmail.com" class="bg-sky-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-sky-600 transition-all duration-300 transform hover:scale-105 inline-block scroll-reveal">
+                    Send Email
+                </a>
+                <div class="flex justify-center space-x-6 mt-10 scroll-reveal">
+                    <a href="https://github.com/ziidannn" target="_blank" class="text-slate-400 hover:text-sky-400 transition-colors duration-300"><i data-feather="github" class="w-6 h-6"></i></a>
+                    <a href="https://linkedin.com/in/zdanazhr" target="_blank" class="text-slate-400 hover:text-sky-400 transition-colors duration-300"><i data-feather="linkedin" class="w-6 h-6"></i></a>
+                </div>
+                <p class="text-slate-500 text-sm mt-12">&copy; 2025 Ziddan Azzahra. Built with passion and code.</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Project Details Modal -->
+    <div id="project-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center p-4 z-[100] hidden transition-opacity duration-300">
+        <div id="modal-content" class="bg-slate-900 border border-slate-700 rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative transform scale-95 transition-transform duration-300">
+            <button id="modal-close-button" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i data-feather="x" class="w-8 h-8"></i></button>
+            <div class="p-8">
+                <h2 id="modal-title" class="text-3xl font-bold text-white mb-4"></h2>
+                <p id="modal-description" class="text-slate-300 leading-relaxed mb-8"></p>
+                <div class="grid grid-cols-1 gap-4 place-items-center">
+                    <img id="modal-img1" src="" alt="Project image 1" class="rounded-lg w-full max-w-lg mb-4">
+                    <img id="modal-img2" src="" alt="Project image 2" class="rounded-lg w-full max-w-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Certificate Modal -->
+    <div id="cert-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center p-4 z-[100] hidden transition-opacity duration-300">
+        <img id="cert-modal-img" src="" alt="Sertifikat" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        <button id="cert-modal-close-button" class="absolute top-4 right-4 text-white hover:text-sky-400"><i data-feather="x" class="w-10 h-10"></i></button>
+    </div>
+
+
+    <!-- Particle.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- Typed.js for typing animation -->
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <!-- ScrollReveal.js for scroll animations -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+
+    <script>
+        // --- Particle.js Initialization ---
+        particlesJS("particles-js", {
+            particles: { number: { value: 40, density: { enable: true, value_area: 800 } }, color: { value: "#475569" }, shape: { type: "circle" }, opacity: { value: 0.3, random: true }, size: { value: 3, random: true }, line_linked: { enable: true, distance: 150, color: "#475569", opacity: 0.2, width: 1 }, move: { enable: true, speed: 1, direction: "none", random: true, straight: false, out_mode: "out" } },
+            interactivity: { detect_on: "canvas", events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true }, modes: { grab: { distance: 140, line_opacity: 0.5 }, push: { particles_nb: 4 } } },
+            retina_detect: true
+        });
+
+        // --- General UI Script ---
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+            
+            // --- Curtain Reveal on Load ---
+            window.addEventListener('load', () => {
+                document.body.classList.add('loaded');
+            });
+
+            // --- Custom Cursor Logic (Lighter version) ---
+            const cursorDot = document.querySelector('.cursor-dot');
+            const hoverables = document.querySelectorAll('a, button, .cert-card');
+
+            window.addEventListener('mousemove', (e) => {
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+            });
+
+            hoverables.forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            });
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+            // --- Typed.js Animation ---
+            new Typed('.text-gradient', {
+                strings: ['Full-Stack Web Developer', 'Informatics Student', 'Organizational Leader'],
+                typeSpeed: 50, backSpeed: 25, backDelay: 2000, loop: true
+            });
+
+            // --- ScrollReveal Animation ---
+            const sr = ScrollReveal({ distance: '60px', duration: 2000, delay: 200, reset: false });
+            sr.reveal('.scroll-reveal', { origin: 'bottom', interval: 100 });
+
+            // --- Active Navbar on Scroll ---
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('#navbar a');
+            
+            function onScroll() {
+                let current = 'hero';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 150) current = section.getAttribute('id');
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) link.classList.add('active');
+                });
+            }
+            window.addEventListener('scroll', onScroll);
+            onScroll();
+
+            // --- Project Modal Logic ---
+            const projectButtons = document.querySelectorAll('.project-details-button');
+            const projectModal = document.getElementById('project-modal');
+            const projectModalContent = document.getElementById('modal-content');
+            const projectModalCloseButton = document.getElementById('modal-close-button');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const modalImg1 = document.getElementById('modal-img1');
+            const modalImg2 = document.getElementById('modal-img2');
+
+            projectButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    modalTitle.textContent = button.dataset.title;
+                    modalDescription.textContent = button.dataset.description;
+                    modalImg1.src = button.dataset.img1;
+                    modalImg2.src = button.dataset.img2;
+                    
+                    projectModal.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                    setTimeout(() => {
+                        projectModal.style.opacity = '1';
+                        projectModalContent.style.transform = 'scale(1)';
+                    }, 10);
+                });
+            });
+
+            function closeProjectModal() {
+                projectModal.style.opacity = '0';
+                projectModalContent.style.transform = 'scale(0.95)';
+                document.body.style.overflow = '';
+                setTimeout(() => projectModal.classList.add('hidden'), 300);
+            }
+
+            projectModalCloseButton.addEventListener('click', closeProjectModal);
+            projectModal.addEventListener('click', (e) => { if (e.target === projectModal) closeProjectModal(); });
+            
+            // --- Certificate Modal Logic ---
+            const certCards = document.querySelectorAll('.cert-card');
+            const certModal = document.getElementById('cert-modal');
+            const certModalImg = document.getElementById('cert-modal-img');
+            const certModalCloseButton = document.getElementById('cert-modal-close-button');
+
+            certCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    certModalImg.src = card.dataset.imgSrc;
+                    certModal.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                     setTimeout(() => {
+                        certModal.style.opacity = '1';
+                    }, 10);
+                });
+            });
+
+            function closeCertModal() {
+                certModal.style.opacity = '0';
+                document.body.style.overflow = '';
+                setTimeout(() => certModal.classList.add('hidden'), 300);
+            }
+
+            certModalCloseButton.addEventListener('click', closeCertModal);
+            certModal.addEventListener('click', (e) => { if (e.target === certModal) closeCertModal(); });
+
+            // Close modals with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === "Escape") {
+                    if (!projectModal.classList.contains('hidden')) closeProjectModal();
+                    if (!certModal.classList.contains('hidden')) closeCertModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
